@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title of the document</title>
+    <script src="../../node_modules/markdown-it/dist/markdown-it.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.auto.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch.min.js"></script>
+
+    <script>
+        function convert() {
+            var md = window.markdownit({
+                html: true,
+                linkify: true,
+                typographer: true
+            });
+            var result = md.render('# markdown-it rulezz!');
+
+            console.log(result);
+        }
+    </script>
+</head>
+<body onload="convert();">
+<div id="content"></div>
+</body>
+</html>
