@@ -37,19 +37,19 @@ require(["markdown-it", "markdown-it-emoji"],
             var mdParser = new markdownIt(defaults);
 
             // mdParser.use(mdItEmoji);//. chain
-            mdParser.use(emoji_plugin_little);
+            mdParser.use(che_action_plugin);
 
             return mdParser;
         }
 
-        function emoji_replace(md) {
+        function che_action(md, options) {
 
-            function createTokenToReplace(text, level, Token) {
-                var token = new Token('text', '', 0);
-                token.content = text.replace(":)", "🤠 ");
-
-                return token;
-            }
+            // function createTokenToReplace(text, level, Token) {
+            //     var token = new Token('text', '', 0);
+            //     token.content = text.replace(":)", "🤠 ");
+            //
+            //     return token;
+            // }
 
             return function(state) {
                 var i,
@@ -65,25 +65,26 @@ require(["markdown-it", "markdown-it-emoji"],
 
                     for (i = children.length - 1; i >= 0; i--) {
                         var token = children[i];
-                        var regExp = new RegExp(".*:\\).*");
+                        var regExp = new RegExp("\\[action,.*\\]");
                         if (token.type === 'text' && regExp.test(token.content)) {
                             console.log("yes");
-                            var newToken = createTokenToReplace(token.content, token.level, state.Token);
-                            tokens[j].children = tokens = md.utils.arrayReplaceAt(children, i, newToken);
+                            token.meta = "id!";
+                            // var newToken = createTokenToReplace(token.content, token.level, state.Token);
+                            // tokens[j].children = tokens = md.utils.arrayReplaceAt(children, i, newToken);
                         }
                     }
                 }
             }
         }
 
-        function emoji_plugin_little(md, options) {
-
+        function che_action_plugin(md, options) {
             //add new rule
             md.renderer.rules.action = function (tokens, idx /*, options, env, self */) {
-                return tokens[idx].content; // here we have html, but in this case we return text too
+                console.log("test for test");
+                return "<input type=\"button\" id=\"" + tokens[idx].meta + "\" value=\"Che action\">";
             };
 
-            md.core.ruler.push('action', emoji_replace(md))
+            md.core.ruler.push('action', che_action(md))
         }
 
         run();
