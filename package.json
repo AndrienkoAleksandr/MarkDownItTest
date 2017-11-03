@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/AndrienkoAleksandr/MarkDownItTest#readme",
   "dependencies": {
+    "linkify-it": "^2.0.3",
     "markdown-it": "^8.4.0",
+    "markdown-it-emoji": "^1.4.0",
     "markdown-it-for-inline": "^0.1.1"
   }
 }
