@@ -36,7 +36,7 @@ require(["markdown-it", "markdown-it-emoji"],
         function markDownInit(markdownIt) {
             var mdParser = new markdownIt(defaults);
 
-            // mdParser.use(mdItEmoji);//. chain
+            mdParser.use(mdItEmoji);//. chain
             mdParser.use(che_action_plugin);
 
             return mdParser;
@@ -44,33 +44,56 @@ require(["markdown-it", "markdown-it-emoji"],
 
         function che_action(md, options) {
 
-             function createTokenToReplace(text, level, Token) {
-                 var token = new Token('action', '', 0);
-                 token.content = text.replace(":)", "🤠 ");
-                 console.log("set Id");
-                 token.meta = "id!";
+             function createTokensToReplace(text, Token) {
+                 //todo improve regexp
+                 var regexpr = new RegExp(/\[action, [^\]]+\]/gi),
+                     last_index = 0,
+                     nodes = [],
+                     token;
+                 text.replace(regexpr, function (match, offset) {
+                     if (offset > last_index) {
+                         token = new Token("text", '', 0);
+                         token.content = text.slice(last_index, offset);
+                         nodes.push(token);
+                     }
 
-                 return token;
+                     token = new Token('action', '', 0);
+                     token.content = "";
+                     token.meta = "id!";
+                     nodes.push(token);
+
+                     last_index = offset + match.length;
+                 });
+
+                 if (last_index < text.length) {
+                     token         = new Token('text', '', 0);
+                     token.content = text.slice(last_index);
+                     nodes.push(token);
+                 }
+
+                 return nodes;
              }
 
             return function(state) {
                 var i,
                     j,
-                    tokens = state.tokens;
+                    tokens,
+                    blockTokens = state.tokens;
 
-                for (j = 0; j < tokens.length; j++) {
-                    if (tokens[j].type !== 'inline') {
-
+                for (j = 0; j < blockTokens.length; j++) {
+                    if (blockTokens[j].type !== 'inline') {
                         continue;
                     }
-                    var children = tokens[j].children;
+                    tokens = blockTokens[j].children;
 
-                    for (i = children.length - 1; i >= 0; i--) {
-                        var token = children[i];
-                        var regExp = new RegExp("\\[action,.*\\]");
+                    for (i = tokens.length - 1; i >= 0; i--) {
+                        var token = tokens[i];
+                        //todo improve regexp
+                        var regExp = new RegExp(".*\\[action,.*\\].*");
+                        console.log("** " + token.content);
                         if (token.type === 'text' && regExp.test(token.content)) {
-                             var newToken = createTokenToReplace(token.content, token.level, state.Token);
-                             tokens[j].children = tokens = md.utils.arrayReplaceAt(children, i, newToken);
+                             var newToken = createTokensToReplace(token.content, state.Token);
+                            blockTokens[j].children = tokens = md.utils.arrayReplaceAt(tokens, i, newToken);
                         }
                     }
                 }
@@ -80,8 +103,7 @@ require(["markdown-it", "markdown-it-emoji"],
         function che_action_plugin(md, options) {
             //add new rule
             md.renderer.rules.action = function (tokens, idx /*, options, env, self */) {
-                console.log("test for test");
-                return "<input type=\"button\" id=\"" + tokens[idx].meta + "\" value=\"Che action\">";
+                return "<input type=\"button\" id=\"" + tokens[idx].meta + "\" value=\"Action\">";
             };
 
             md.core.ruler.push('action', che_action(md))
