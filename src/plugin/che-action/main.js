@@ -44,12 +44,14 @@ require(["markdown-it", "markdown-it-emoji"],
 
         function che_action(md, options) {
 
-            // function createTokenToReplace(text, level, Token) {
-            //     var token = new Token('text', '', 0);
-            //     token.content = text.replace(":)", "🤠 ");
-            //
-            //     return token;
-            // }
+             function createTokenToReplace(text, level, Token) {
+                 var token = new Token('action', '', 0);
+                 token.content = text.replace(":)", "🤠 ");
+                 console.log("set Id");
+                 token.meta = "id!";
+
+                 return token;
+             }
 
             return function(state) {
                 var i,
@@ -67,10 +69,8 @@ require(["markdown-it", "markdown-it-emoji"],
                         var token = children[i];
                         var regExp = new RegExp("\\[action,.*\\]");
                         if (token.type === 'text' && regExp.test(token.content)) {
-                            console.log("yes");
-                            token.meta = "id!";
-                            // var newToken = createTokenToReplace(token.content, token.level, state.Token);
-                            // tokens[j].children = tokens = md.utils.arrayReplaceAt(children, i, newToken);
+                             var newToken = createTokenToReplace(token.content, token.level, state.Token);
+                             tokens[j].children = tokens = md.utils.arrayReplaceAt(children, i, newToken);
                         }
                     }
                 }
