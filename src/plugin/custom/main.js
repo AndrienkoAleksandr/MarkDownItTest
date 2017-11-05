@@ -2,7 +2,7 @@ require.config({
   paths: {
     'markdown-it' : '../../../node_modules/markdown-it/dist/markdown-it',
     "markdown-it-for-inline" : '../../../node_modules/markdown-it-for-inline/dist/markdown-it-for-inline',
-//    "markdown-it-emoji": '../../../node_modules/markdown-it-emoji/dist/markdown-it-emoji'
+    "markdown-it-emoji": '../../../node_modules/markdown-it-emoji/dist/markdown-it-emoji'
   }
 }); 
 
@@ -36,8 +36,8 @@ require(["markdown-it", "markdown-it-emoji"],
         function markDownInit(markdownIt) {
             var mdParser = new markdownIt(defaults);
 
-             mdParser.use(mdItEmoji);//. chain
-//            mdParser.use(emoji_plugin_little);
+//             mdParser.use(mdItEmoji);//. chain
+            mdParser.use(emoji_plugin_little);
 
             return mdParser;
         }
@@ -45,7 +45,7 @@ require(["markdown-it", "markdown-it-emoji"],
         function emoji_replace(md) {
 
             function createTokenToReplace(text, level, Token) {
-                var token = new Token('text', '', 0);
+                var token = new Token('emoji', '', 0);
                 token.content = text.replace(":)", "😃 ");
 
                 return token;
@@ -80,8 +80,7 @@ require(["markdown-it", "markdown-it-emoji"],
 
             //add new rule
             md.renderer.rules.emoji = function (tokens, idx /*, options, env, self */) {
-                console.log("rule emotion here!!!")
-                return tokens[idx].content; // here we have html, but in this case we return text too
+                return tokens[idx].content;  // here we can generate html to output, but we return text
             };
 
             console.log(md.renderer.rules);
