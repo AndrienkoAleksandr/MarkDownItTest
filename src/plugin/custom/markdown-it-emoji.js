@@ -1655,64 +1655,65 @@ module.exports = function create_rule(md, emojies, shortcuts, scanRE, replaceRE)
   }
 
   function createTokenToReplace(text, level, Token) {
-     var token = new Token('text', '', 0);
+     var token = new Token('emoji', '', 0);
      token.content = text.replace(":)", "😃 ");
 
      return token;
   }
 
-//  return function emoji_replace(state) {
-//     var i,
-//         j,
-//         tokens = state.tokens;
-//
-//     for (j = 0; j < tokens.length; j++) {
-//         if (tokens[j].type !== 'inline') {
-//
-//             continue;
-//         }
-//         var children = tokens[j].children;
-//
-//         for (i = children.length - 1; i >= 0; i--) {
-//             var token = children[i];
-//             var regExp = new RegExp(".*:\\).*");
-//             if (token.type === 'text' && regExp.test(token.content)) {
-//                 console.log("yes");
-//                 var newToken = createTokenToReplace(token.content, token.level, state.Token);
-//                 tokens[j].children = tokens = md.utils.arrayReplaceAt(children, i, newToken);
-//             }
-//         }
-//     }
-//  }
-
-
   return function emoji_replace(state) {
-    var i, j, l, tokens, token,
-        blockTokens = state.tokens,
-        autolinkLevel = 0;
+     var i,
+         j,
+         tokens = state.tokens;
 
-    for (j = 0, l = blockTokens.length; j < l; j++) {
-      if (blockTokens[j].type !== 'inline') { continue; }
-      tokens = blockTokens[j].children;
+     for (j = 0; j < tokens.length; j++) {
+         if (tokens[j].type !== 'inline') {
 
-      // We scan from the end, to keep position when new tags added.
-      // Use reversed logic in links start/end match
-      for (i = tokens.length - 1; i >= 0; i--) {
-        token = tokens[i];
+             continue;
+         }
 
-        if (token.type === 'link_open' || token.type === 'link_close') {
-          if (token.info === 'auto') { autolinkLevel -= token.nesting; }
-        }
+         var children = tokens[j].children;
 
-        if (token.type === 'text' && autolinkLevel === 0 && scanRE.test(token.content)) {
-          // replace current node
-          blockTokens[j].children = tokens = md.utils.arrayReplaceAt(
-            tokens, i, splitTextToken(token.content, token.level, state.Token)
-          );
-        }
-      }
-    }
-  };
+         for (i = children.length - 1; i >= 0; i--) {
+             var token = children[i];
+             var regExp = new RegExp(".*:\\).*");
+             if (token.type === 'text' && regExp.test(token.content)) {
+                 console.log("yes");
+                 var newToken = createTokenToReplace(token.content, token.level, state.Token);
+                 tokens[j].children = tokens = md.utils.arrayReplaceAt(children, i, newToken);
+             }
+         }
+     }
+  }
+
+
+//  return function emoji_replace(state) {
+//    var i, j, l, tokens, token,
+//        blockTokens = state.tokens,
+//        autolinkLevel = 0;
+//
+//    for (j = 0, l = blockTokens.length; j < l; j++) {
+//      if (blockTokens[j].type !== 'inline') { continue; }
+//      tokens = blockTokens[j].children;
+//
+//      // We scan from the end, to keep position when new tags added.
+//      // Use reversed logic in links start/end match
+//      for (i = tokens.length - 1; i >= 0; i--) {
+//        token = tokens[i];
+//
+//        if (token.type === 'link_open' || token.type === 'link_close') {
+//          if (token.info === 'auto') { autolinkLevel -= token.nesting; }
+//        }
+//
+//        if (token.type === 'text' && autolinkLevel === 0 && scanRE.test(token.content)) {
+//          // replace current node
+//          blockTokens[j].children = tokens = md.utils.arrayReplaceAt(
+//            tokens, i, splitTextToken(token.content, token.level, state.Token)
+//          );
+//        }
+//      }
+//    }
+//  };
 
 
 };
