@@ -2,21 +2,18 @@
   "name": "mark-down-it-test",
   "version": "1.0.0",
   "description": "Test extensibility markdown-it lib",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "main": "dis/mdItCheAction.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AndrienkoAleksandr/MarkDownItTest.git"
   },
-  "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/AndrienkoAleksandr/MarkDownItTest/issues"
   },
   "homepage": "https://github.com/AndrienkoAleksandr/MarkDownItTest#readme",
   "dependencies": {
+    "@types/node": "6.0.41",
     "linkify-it": "^2.0.3",
     "markdown-it": "^8.4.0",
     "markdown-it-emoji": "^1.4.0",
@@ -28,5 +25,8 @@
     "vinyl-buffer": "1.0.0",
     "gulp-sourcemaps": "2.4.0",
     "gulp-uglify": "2.0.0"
+  },
+  "scripts": {
+    "build": "gulp"
   }
 }
