@@ -12,7 +12,6 @@ require(["markdown-it", "markdown-it-emoji"],
         function run() {
             var mdParser = markDownInit(markdownIt);
 
-            // convertor.convert(mdParser);
             var content = document.getElementById("content-widget").value;
 
             document.getElementById("result-container").innerHTML = mdParser.render(content);
