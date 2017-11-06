@@ -14,7 +14,7 @@ gulp.task('browserify', function() {
       var browserifyOptions = {
         basedir: buildDir,
         debug: true,
-        entries: ['../lib'],
+        entries: ['../index.js'],
         standalone: 'markdown-it-action',
         cache: {},
         packageCache: {}
@@ -23,7 +23,7 @@ gulp.task('browserify', function() {
         .bundle()
         .pipe(source('mdItCheAction.js'))
         .pipe(buffer())
-        .pipe(sourcemaps.init({loadMaps: true, sourceRoot: '..'}))
+        .pipe(sourcemaps.init({loadMaps: true, sourceRoot: '../lib'}))
 //        .pipe(uglify())
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(buildDir));

@@ -21,8 +21,6 @@ function(markdownIt, mdItAction) {
 
     var mdParser = new markdownIt(defaults);
 
-    console.log(mdItAction);
-
     mdParser.use(mdItAction);
 
     var content = document.getElementById("content-widget").value;
