@@ -2,12 +2,13 @@ require.config({
   paths: {
     'markdown-it' : '../../../node_modules/markdown-it/dist/markdown-it',
     "markdown-it-for-inline" : '../../../node_modules/markdown-it-for-inline/dist/markdown-it-for-inline',
-    "markdown-it-emoji": '../../../node_modules/markdown-it-emoji/dist/markdown-it-emoji'
+    "markdown-it-emoji": '../../../node_modules/markdown-it-emoji/dist/markdown-it-emoji',
+    "tt": "mdItEmotji"
   }
 }); 
 
-require(["markdown-it", "markdown-it-emoji"],
-    function(markdownIt, mdItEmoji) {
+require(["markdown-it", "markdown-it-emoji", "tt"],
+    function(markdownIt, mdItEmoji, tt) {
 
         function run() {
             var mdParser = markDownInit(markdownIt);
@@ -35,8 +36,8 @@ require(["markdown-it", "markdown-it-emoji"],
         function markDownInit(markdownIt) {
             var mdParser = new markdownIt(defaults);
 
-//             mdParser.use(mdItEmoji);//. chain
-            mdParser.use(emoji_plugin_little);
+             mdParser.use(tt);//. chain
+//            mdParser.use(emoji_plugin_little);
 
             return mdParser;
         }

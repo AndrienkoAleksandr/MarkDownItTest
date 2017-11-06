@@ -21,7 +21,7 @@ function(markdownIt, mdItAction) {
 
     var mdParser = new markdownIt(defaults);
 
-    console.log(mdItAction)
+    console.log(mdItAction);
 
     mdParser.use(mdItAction);
 

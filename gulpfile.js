@@ -4,6 +4,7 @@ const gulp = require('gulp');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 const sourcemaps = require("gulp-sourcemaps");
+const uglify = require('gulp-uglify');
 
 var buildDir = 'dist';
 
@@ -13,7 +14,7 @@ gulp.task('browserify', function() {
       var browserifyOptions = {
         basedir: buildDir,
         debug: true,
-        entries: ['../src/index.js', '../src/ruler.js'],
+        entries: ['../lib'],
         standalone: 'markdown-it-action',
         cache: {},
         packageCache: {}
@@ -22,9 +23,9 @@ gulp.task('browserify', function() {
         .bundle()
         .pipe(source('mdItCheAction.js'))
         .pipe(buffer())
-//        .pipe(sourcemaps.init({loadMaps: true, sourceRoot: '..'}))
-//        .pipe(uglify()) //todo
-//        .pipe(sourcemaps.write('./'))
+        .pipe(sourcemaps.init({loadMaps: true, sourceRoot: '..'}))
+//        .pipe(uglify())
+        .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(buildDir));
 });
 
